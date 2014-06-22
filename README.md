@@ -9,7 +9,7 @@ This here repo is Jacob Emerick's submission for Getting and Cleaning Data (week
 
 ## Instructions
 
-Simply run 'run_analysis.R' in the same working directory as the UCI HAR data set. There is one dependency that the script will attempt to boot (reshape2)[http://cran.r-project.org/web/packages/reshape2/reshape2.pdf]. Upon completion the script will write to a file 'tidy-data.csv' in the same directory. More information about the format of the output can be found in 'CodeBook.md'.
+Simply run 'run_analysis.R' in the same working directory as the UCI HAR data set. There is one dependency that the script will attempt to boot [reshape2](http://cran.r-project.org/web/packages/reshape2/reshape2.pdf). Upon completion the script will write to a file 'tidy-data.csv' in the same directory. More information about the format of the output can be found in 'CodeBook.md'.
 
 ## Script Description
 
@@ -25,13 +25,9 @@ The script is pretty simple.
 
 ## Dataset Source.
 
-Jorge L. Reyes-Ortiz, Davide Anguita, Alessandro Ghio, Luca Oneto.
-
-Smartlab - Non Linear Complex Systems Laboratory
-
-DITEN - UniversitÃ  degli Studi di Genova, Genoa I-16145, Italy.
-
-activityrecognition '@' smartlab.ws
-
-(www.smartlab.ws)[http://www.smartlab.ws]
+Jorge L. Reyes-Ortiz, Davide Anguita, Alessandro Ghio, Luca Oneto.  
+Smartlab - Non Linear Complex Systems Laboratory  
+DITEN - UniversitÃ  degli Studi di Genova, Genoa I-16145, Italy.  
+activityrecognition '@' smartlab.ws  
+[www.smartlab.ws](http://www.smartlab.ws)  
 
