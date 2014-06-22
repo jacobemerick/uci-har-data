@@ -1,44 +1,44 @@
-clean_uci_har_data <- function (directory = "raw-data/UCI HAR Dataset/") {
-    #lets grab some necessary information
-    activities <- read.table(paste(
-        directory,
-        "activity_labels.txt",
-        sep = ""
-    ), col.names = c("key", "activity"))
-    measurements <- read.table(paste(
-        directory,
-        "features.txt",
-        sep = ""
-    ), col.names = c("key", "rawFeature"))
-    
-    # parse measurements to see what columns we want (only mean and std dev)
-    target_measurement_keys <- grep("(std|mean)\\b", measurements$rawFeature)
-    target_measurements <- measurements[target_measurement_keys,]
-    
-    suppressWarnings(
-        verbose_measurements <- data.frame(do.call(
-            "rbind",
-            strsplit(as.character(target_measurements$rawFeature), "-")
-        ), col.names = c("measurement", "summary", "direction"))
-    )
-    
-    target_measurements <- cbind(target_measurements, verbose_measurements)
-    
-    #grab and parse the test data
-    test_subjects <- read.table(paste(directory, "test/subject_test.txt", sep = ""))
-    test_activities <- read.table(paste(directory, "test/y_test.txt", sep = ""))
-    test_data <- read.table(paste(directory, "test/X_test.txt", sep = ""))
-    
-    test_activities <- merge(test_activities, activities, by.x = "V1", by.y = "key", sort = FALSE)
-    
-    test_data <- test_data[,target_measurements$key]
-    test_data <- cbind(test_subjects, test_activities, test_data)
-    
-    #TODO - combine measurement meta data w/ test data and sort into sensible table
-    #TODO - abstract out logic to repeat for 'train'
-    #TODO - combine train & test data
-    #TODO - (subject, type = c('test', 'train'), activity, measurement) X (mean, std)
-    
-    #TODO - reduce first set to average activity per subject
-    
-}
+#grab some necessary information
+activities <- read.table(
+    "activity_labels.txt",
+    col.names = c("key", "activity"),
+    as.is = TRUE
+)
+features <- read.table(
+    "features.txt",
+    col.names = c("key", "feature"),
+    as.is = TRUE
+)
+
+#create test data frame
+test_uci_data <- cbind(
+    read.table("test/subject_test.txt", col.names = "subject"),
+    read.table("test/y_test.txt", col.names = "activity_key"),
+    read.table("test/X_test.txt", col.names = features$feature)
+)
+
+#create train data frame
+train_uci_data <- cbind(
+    read.table("train/subject_train.txt", col.names = "subject"),
+    read.table("train/y_train.txt", col.names = "activity_key"),
+    read.table("train/X_train.txt", col.names = features$feature)
+)
+
+#combine data frames to one set
+uci_data <- rbind(test_uci_data, train_uci_data)
+uci_data <- merge(
+    uci_data,
+    activities,
+    by.x = "activity_key",
+    by.y = "key",
+    sort = FALSE
+)
+rm(features, activities, test_uci_data, train_uci_data)
+
+#only use the columns we need
+uci_data <- uci_data[, c(
+    'subject',
+    'activity', 
+    colnames(uci_data)[grep('(mean|std)\\b', colnames(uci_data))])
+]
+
