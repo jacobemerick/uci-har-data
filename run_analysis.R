@@ -1,3 +1,6 @@
+#check for library dependency
+library("reshape2")
+
 #grab some necessary information
 activities <- read.table(
     "activity_labels.txt",
@@ -42,3 +45,12 @@ uci_data <- uci_data[, c(
     colnames(uci_data)[grep('(mean|std)\\b', colnames(uci_data))])
 ]
 
+#recast dataset for tidy format
+uci_data <- dcast(
+    melt(uci_data, id = c('subject', 'activity')),
+    subject + activity ~ variable, mean
+)
+
+#finally, write and drop data
+write.table(uci_data, "tidy-data.txt", row.names = FALSE)
+rm(uci_data)
